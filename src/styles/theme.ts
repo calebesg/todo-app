@@ -2,8 +2,6 @@ import { extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 import { Dict } from '@chakra-ui/utils'
 
-import Input from './components/Input'
-
 const theme = {
   config: {
     initialColorMode: 'dark',
@@ -32,9 +30,6 @@ const theme = {
     purple: {
       500: 'hsl(280, 87%, 65%)',
     },
-  },
-  components: {
-    Input,
   },
   styles: {
     global: (props: Dict<any>) => ({

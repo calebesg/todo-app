@@ -26,7 +26,7 @@ export function Header({ children }: HeaderProps) {
     >
       <Flex flexDirection="column" maxW="540px" w="full" gap={10}>
         <Flex alignItems="center" justifyContent="space-between">
-          <Heading as="h1" textColor="white" letterSpacing="widest">
+          <Heading as="h1" textColor="white" letterSpacing="1.25rem">
             TODO
           </Heading>
           <ToggleThemeButton />
