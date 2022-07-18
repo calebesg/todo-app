@@ -1,12 +1,23 @@
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { Button, useColorMode } from '@chakra-ui/react'
-import { Moon, Sun } from 'phosphor-react'
 
 export function ToggleThemeButton() {
   const { colorMode, toggleColorMode } = useColorMode()
 
   return (
-    <Button onClick={toggleColorMode}>
-      {colorMode === 'light' ? <Sun size={20} /> : <Moon size={20} />}
+    <Button
+      w={10}
+      h={10}
+      rounded="full"
+      bg="transparent"
+      textColor="white"
+      onClick={toggleColorMode}
+    >
+      {colorMode === 'light' ? (
+        <SunIcon w={6} h={6} />
+      ) : (
+        <MoonIcon w={6} h={6} />
+      )}
     </Button>
   )
 }
