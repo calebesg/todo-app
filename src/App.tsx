@@ -1,3 +1,11 @@
+import { Box } from '@chakra-ui/react'
+import { ToggleThemeButton } from './components/ToggleThemeButton'
+
 export function App() {
-  return <h1>Hello</h1>
+  return (
+    <Box>
+      <h1>Hello</h1>
+      <ToggleThemeButton />
+    </Box>
+  )
 }
