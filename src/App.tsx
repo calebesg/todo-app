@@ -1,11 +1,16 @@
-import { Box } from '@chakra-ui/react'
-import { ToggleThemeButton } from './components/ToggleThemeButton'
+import { FormCreateTodo } from './components/FormCreateTodo'
+import { Header } from './components/Header'
 
 export function App() {
   return (
-    <Box>
-      <h1>Hello</h1>
-      <ToggleThemeButton />
-    </Box>
+    <>
+      <Header>
+        <FormCreateTodo />
+      </Header>
+
+      <main>
+        <p>Content!!!</p>
+      </main>
+    </>
   )
 }
