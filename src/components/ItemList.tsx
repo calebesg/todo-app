@@ -5,18 +5,19 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react'
-import { useState } from 'react'
 
 interface ItemList {
+  id: string
   text: string
+  checked: boolean
+  onChange: (id: string) => void
+  remove: (id: string) => void
 }
 
-export function ItemList({ text }: ItemList) {
-  const [checked, setChecked] = useState(false)
-
-  function handleChange() {
-    console.log('oi')
-    setChecked(!checked)
+export function ItemList({ id, text, onChange, checked, remove }: ItemList) {
+  function execAction(fn: any, event?: any) {
+    event?.stopPropagation()
+    fn(id)
   }
 
   return (
@@ -31,7 +32,7 @@ export function ItemList({ text }: ItemList) {
       px="5"
       h="16"
       gap={2}
-      onClick={() => handleChange()}
+      onClick={e => execAction(onChange, e)}
     >
       <Flex
         border="1px"
@@ -57,7 +58,7 @@ export function ItemList({ text }: ItemList) {
           borderRadius="full"
           bgGradient={checked ? 'linear(to-tl, purple.500, green.500)' : ''}
           isChecked={checked}
-          onChange={e => handleChange()}
+          onChange={e => execAction(onChange, e)}
         />
       </Flex>
 
@@ -72,6 +73,7 @@ export function ItemList({ text }: ItemList) {
       </Text>
 
       <CloseButton
+        onClick={e => execAction(remove, e)}
         rounded="full"
         visibility="hidden"
         _groupHover={{ visibility: 'visible' }}
