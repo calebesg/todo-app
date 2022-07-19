@@ -21,6 +21,7 @@ export function FormCreateTodo() {
         onChange={e => setText(e.target.value)}
         type="text"
         aria-label="enter a new todo"
+        boxShadow="2xl"
       />
     </FormControl>
   )
