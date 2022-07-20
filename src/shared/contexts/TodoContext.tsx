@@ -1,10 +1,5 @@
 import { createContext, useState } from 'react'
-
-type Todo = {
-  id: string
-  value: string
-  isCompleted: boolean
-}
+import { Todo } from '../types/todo'
 
 type TodoContextType = {
   list: Todo[]
