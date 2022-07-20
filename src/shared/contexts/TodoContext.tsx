@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { Todo } from '../types/todo'
 
 type TodoContextType = {
@@ -27,24 +27,56 @@ function TodoProvider({ children }: TodoProviderProps) {
   const [list, setList] = useState<Todo[]>([])
   const [leftover, setLeftover] = useState(0)
 
+  useEffect(() => {
+    load()
+  }, [])
+
+  useEffect(() => {
+    const total = list.reduce((acc: number, cur: Todo) => {
+      if (cur.isCompleted) return acc
+      return acc + 1
+    }, 0)
+
+    setLeftover(total)
+  }, [list])
+
+  async function load() {
+    const storage = await localStorage.getItem(
+      import.meta.env.VITE_STORAGE_NAME
+    )
+
+    if (!storage) return
+
+    const list = JSON.parse(storage)
+    setList(list)
+  }
+
+  function save() {
+    localStorage.setItem(
+      import.meta.env.VITE_STORAGE_NAME,
+      JSON.stringify(list)
+    )
+  }
+
+  function updateList(todoList: Todo[]) {
+    setList(todoList)
+    save()
+  }
+
   function add(value: string) {
     const id = `${new Date().toTimeString()}${Math.random()}`
-
     const updatedList = [...list, { id, value, isCompleted: false }]
-
-    setList(updatedList)
-    _countLeftover(updatedList)
+    updateList(updatedList)
   }
 
   function remove(id: string) {
     const updatedList = list.filter(item => item.id !== id)
-    setList(updatedList)
-    _countLeftover(updatedList)
+    updateList(updatedList)
   }
 
   function removeAllCompleted() {
     const updatedList = list.filter(item => !item.isCompleted)
-    setList(updatedList)
+    updateList(updatedList)
   }
 
   function changeStatus(id: string) {
@@ -53,12 +85,7 @@ function TodoProvider({ children }: TodoProviderProps) {
       return item
     })
 
-    setList(updatedList)
-    _countLeftover(updatedList)
-  }
-
-  function _countLeftover(list: Todo[]) {
-    setLeftover(list.filter(item => !item.isCompleted).length)
+    updateList(updatedList)
   }
 
   return (
