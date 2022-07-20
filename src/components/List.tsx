@@ -1,5 +1,7 @@
-import { Button, Flex, Text, useColorMode } from '@chakra-ui/react'
+import { Flex, Text, useColorMode } from '@chakra-ui/react'
 import { useTodoContext } from '../shared/hooks/useTodoData'
+import { ButtonCustom } from './ButtonCustom'
+import { Filter } from './Filter'
 import { ItemList } from './ItemList'
 
 export function List() {
@@ -29,18 +31,14 @@ export function List() {
         ))}
       </Flex>
 
-      <Flex justifyContent="space-between" alignItems="center" px="5" py="1">
+      <Flex justifyContent="space-between" alignItems="center" px="5" py="4">
         <Text fontSize="sm" fontWeight="normal" color="grayish.500">
           {leftover} items left
         </Text>
-        <Button
-          variant="unstyled"
-          fontWeight="normal"
-          fontSize="sm"
-          onClick={removeAllCompleted}
-        >
-          Clear Completed
-        </Button>
+
+        <Filter />
+
+        <ButtonCustom text="Clear Completed" action={removeAllCompleted} />
       </Flex>
     </Flex>
   )
