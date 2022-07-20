@@ -2,14 +2,18 @@ import { Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import { ButtonCustom } from './ButtonCustom'
 
-type ActionType = 'all' | 'active' | 'completed'
+import { ActionType } from '../shared/types/action'
 
-export function Filter() {
+interface FilterProps {
+  action: (type: ActionType) => void
+}
+
+export function Filter({ action }: FilterProps) {
   const [activeButton, setActiveButton] = useState<ActionType>('all')
 
   function handleFilter(type: ActionType) {
-    console.log(type)
     setActiveButton(type)
+    action(type)
   }
 
   return (
