@@ -1,6 +1,9 @@
 import { Box, Flex, Heading, useColorMode } from '@chakra-ui/react'
 import { ToggleThemeButton } from './ToggleThemeButton'
 
+import bgDark from '../assets/bg-desktop-dark.jpg'
+import bgLight from '../assets/bg-desktop-light.jpg'
+
 interface HeaderProps {
   children?: any
 }
@@ -10,11 +13,7 @@ export function Header({ children }: HeaderProps) {
 
   return (
     <Box
-      bgImage={
-        colorMode === 'light'
-          ? 'url(./src/assets/bg-desktop-light.jpg)'
-          : 'url(./src/assets/bg-desktop-dark.jpg)'
-      }
+      bgImage={colorMode === 'light' ? bgLight : bgDark}
       bgSize="cover"
       as="header"
       display="flex"
