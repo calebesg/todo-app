@@ -51,16 +51,16 @@ function TodoProvider({ children }: TodoProviderProps) {
     setList(list)
   }
 
-  function save() {
+  function save(data: Todo[]) {
     localStorage.setItem(
       import.meta.env.VITE_STORAGE_NAME,
-      JSON.stringify(list)
+      JSON.stringify(data)
     )
   }
 
   function updateList(todoList: Todo[]) {
     setList(todoList)
-    save()
+    save(todoList)
   }
 
   function add(value: string) {
