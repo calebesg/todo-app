@@ -21,6 +21,7 @@ export function List() {
         {list.map((item, index) => (
           <ItemList
             key={index}
+            index={index}
             id={item.id}
             text={item.value}
             checked={item.isCompleted}

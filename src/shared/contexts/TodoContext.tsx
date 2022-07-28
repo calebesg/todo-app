@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
+import update from 'immutability-helper'
 import { Todo } from '../types/todo'
 
 type TodoContextType = {
@@ -7,6 +8,7 @@ type TodoContextType = {
   add: (value: string) => void
   remove: (id: string) => void
   removeAllCompleted: () => void
+  moveCard: (dragIndex: number, hoverIndex: number) => void
   changeStatus: (id: string) => void
 }
 
@@ -16,6 +18,7 @@ const TodoContext = createContext<TodoContextType>({
   add: () => {},
   remove: () => {},
   removeAllCompleted: () => {},
+  moveCard: () => {},
   changeStatus: () => {},
 })
 
@@ -39,6 +42,17 @@ function TodoProvider({ children }: TodoProviderProps) {
 
     setLeftover(total)
   }, [list])
+
+  const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
+    setList((prevList: Todo[]) =>
+      update(prevList, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevList[dragIndex] as Todo],
+        ],
+      })
+    )
+  }, [])
 
   async function load() {
     const storage = await localStorage.getItem(
@@ -90,7 +104,15 @@ function TodoProvider({ children }: TodoProviderProps) {
 
   return (
     <TodoContext.Provider
-      value={{ list, add, remove, leftover, changeStatus, removeAllCompleted }}
+      value={{
+        list,
+        add,
+        remove,
+        leftover,
+        changeStatus,
+        removeAllCompleted,
+        moveCard,
+      }}
     >
       {children}
     </TodoContext.Provider>

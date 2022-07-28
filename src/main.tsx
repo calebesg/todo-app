@@ -1,18 +1,21 @@
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
-import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { App } from './App'
 import { TodoProvider } from './shared/contexts/TodoContext'
 import theme from './styles/theme'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  <>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <ChakraProvider theme={theme}>
       <TodoProvider>
-        <App />
+        <DndProvider backend={HTML5Backend}>
+          <App />
+        </DndProvider>
       </TodoProvider>
     </ChakraProvider>
-  </React.StrictMode>
+  </>
 )

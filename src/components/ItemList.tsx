@@ -5,23 +5,93 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react'
+import { useRef } from 'react'
+import { useDrag, useDrop, XYCoord } from 'react-dnd'
+import { Identifier } from 'dnd-core'
+import { useTodoContext } from '../shared/hooks/useTodoData'
+
+interface DragItem {
+  id: string
+  index: number
+  type: string
+}
 
 interface ItemList {
   id: string
   text: string
+  index: number
   checked: boolean
   onChange: (id: string) => void
   remove: (id: string) => void
 }
 
-export function ItemList({ id, text, onChange, checked, remove }: ItemList) {
+export function ItemList({
+  id,
+  text,
+  onChange,
+  checked,
+  remove,
+  index,
+}: ItemList) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const { moveCard } = useTodoContext()
+
+  const [{ isDragging }, dragRef] = useDrag({
+    type: 'CARD',
+    item: () => {
+      return { id, index }
+    },
+    collect: monitor => ({ isDragging: monitor.isDragging() }),
+  })
+
+  const [{ handlerId }, dropRef] = useDrop<
+    DragItem,
+    void,
+    { handlerId: Identifier | null }
+  >({
+    accept: 'CARD',
+    collect(monitor) {
+      return { handlerId: monitor.getHandlerId() }
+    },
+    hover(item: DragItem, monitor) {
+      if (!ref.current) return
+
+      const dragIndex = item.index
+      const hoverIndex = index
+
+      if (dragIndex === hoverIndex) return
+
+      const hoverDimensions = ref.current.getBoundingClientRect()
+
+      const hoverMiddleY = (hoverDimensions.bottom - hoverDimensions.top) / 2
+
+      const clientOffset = monitor.getClientOffset()
+
+      const hoverClientY = (clientOffset as XYCoord).y - hoverDimensions.top
+
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+
+      moveCard(dragIndex, hoverIndex)
+      item.index = hoverIndex
+    },
+  })
+
   function execAction(fn: any, event?: any) {
     event?.stopPropagation()
     fn(id)
   }
 
+  const opacity = isDragging ? 0 : 1
+
+  dragRef(dropRef(ref))
+
   return (
     <ButtonGroup
+      ref={ref}
+      opacity={opacity}
+      data-handle-id={handlerId}
       display="flex"
       w="full"
       alignItems="center"
